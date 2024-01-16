@@ -116,7 +116,7 @@ export const GET = async (
 
     const { billboardId } = params;
 
-    const billboards = await prismadb.billboard.findMany({
+    const billboards = await prismadb.billboard.findUnique({
       where: {
         id: billboardId,
       },

@@ -5,6 +5,7 @@ import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import prismadb from "@/lib/prismadb";
 import { Navbar } from "@/components/general/navbar";
+import { isValidObjectId } from "@/lib/objectIdValidator";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,6 +27,12 @@ export default async function DashboardLayout({
 
   if (!userId) {
     redirect("/sign-in");
+  };
+
+  const isObjectIDValid = isValidObjectId(params?.storeId);
+
+  if (!isObjectIDValid) {
+    redirect("/");
   };
 
   const store = await prismadb.store.findFirst({

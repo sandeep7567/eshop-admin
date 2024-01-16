@@ -2,7 +2,7 @@
 
 import { FC, useState } from "react";
 
-import { Copy, CopyCheck, IconNode, Server } from "lucide-react";
+import { Check, Copy, Server } from "lucide-react";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge, BadgeProps } from "@/components/ui/badge";
@@ -32,13 +32,20 @@ export const ApiAlert: FC<ApiAlertProps> = ({
   variant = "public",
 }) => {
   const [isCopy, setIsCopy] = useState(false);
+  const copyTimeout = 1500;
 
   const onCopyText = () => {
+    setIsCopy(true);
     const { success } = onCopy(description);
+    
     if (success) {
       toast.success("api route copied to the clipboard");
-      setIsCopy(true);
-    }
+
+      const interval = setTimeout(() => {
+        clearInterval(interval);  // Clear the interval before setting setIsCopy(false)
+        setIsCopy(false);
+      }, copyTimeout);
+    };
   };
 
   return (
@@ -56,7 +63,7 @@ export const ApiAlert: FC<ApiAlertProps> = ({
           {isCopy === false ? (
             <Copy className="h-4 w-4" />
           ) : (
-            <CopyCheck className="h-4 w-4 text-emerald-600" />
+            <Check className="h-3.5 w-3.5" />
           )}
         </Button>
       </AlertDescription>

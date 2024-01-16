@@ -2,8 +2,6 @@
 
 import { FC, useState } from "react";
 
-import { BillboardColumn } from "@/components/columns/billboards-columns";
-
 import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,13 +15,16 @@ import { onCopy } from "@/hooks/use-copy";
 import { toast } from "sonner";
 import { useParams, useRouter } from "next/navigation";
 import { AlertModal } from "../modals/alert-models";
+
 import axios from "axios";
+
+import { BillboardColumn } from "@/components/columns/billboards-columns";
 
 interface CellActionProps {
   data: BillboardColumn;
 }
 
-const CellAction: FC<CellActionProps> = ({ data }) => {
+export const BillBoardCellAction: FC<CellActionProps> = ({ data }) => {
   const router = useRouter();
   const params: { storeId: string } = useParams();
   const [isOpen, setIsOpen] = useState(false);
@@ -95,5 +96,3 @@ const CellAction: FC<CellActionProps> = ({ data }) => {
     </>
   );
 };
-
-export default CellAction;

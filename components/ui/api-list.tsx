@@ -1,7 +1,6 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { Alert } from "./alert";
 import { useOrigin } from "@/hooks/use-origin";
 import { ApiAlert } from "@/components/ui/api-alert";
 
@@ -33,7 +32,7 @@ export const ApiList: React.FC<ApiListProps> = ({
       />
       <ApiAlert
         title="POST"
-        description={`${baseUrl}/${entityName}/{${entityIdName}}`}
+        description={`${baseUrl}/${entityName}`}
         variant="admin"
       />
       <ApiAlert
