@@ -12,6 +12,7 @@ import {
   BillboardColumns,
 } from "@/components/columns/billboards-columns";
 import { DataTable } from "@/components/ui/data-table";
+import { ApiList } from "@/components/ui/api-list";
 
 interface BillBoardClientProps {
   data: BillboardColumn[];
@@ -40,6 +41,16 @@ export const BillBoardClient: React.FC<BillBoardClientProps> = ({ data }) => {
         columns={BillboardColumns}
         data={data}
         searchKey="label"
+      />
+      <Separator/>
+      <Heading
+          title={"Api"}
+          description="Api call for Billboards"
+      />
+      <Separator/>
+      <ApiList
+        entityName={"billboards"}
+        entityIdName={"billboardId"}
       />
     </>
   );

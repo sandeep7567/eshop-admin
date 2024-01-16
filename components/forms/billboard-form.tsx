@@ -63,8 +63,8 @@ export const BillboardForm: FC<BillboardFormProps> = ({
       } else {
         await axios.post(`/api/${params.storeId}/billboards`, values);
       }
-      router.refresh();
       router.push(`/${params.storeId}/billboards`)
+      router.refresh();
       toast.success(toastMessage);
     } catch (error) {
       toast.error("Something went wrong");
@@ -78,7 +78,7 @@ export const BillboardForm: FC<BillboardFormProps> = ({
       setIsLoading(true);
       await axios.delete(`/api/${params.storeId}/billboards/${params.billboardId}`);
       router.refresh();
-      router.push("/");
+      router.push(`/${params.storeId}/billboards`);
       toast.success("Billboard deleted!");
     } catch (error) {
       toast.error(
@@ -86,6 +86,7 @@ export const BillboardForm: FC<BillboardFormProps> = ({
       );
     } finally {
       setIsLoading(false);
+      setIsOpen(false);
     }
   };
 

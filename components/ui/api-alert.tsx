@@ -8,6 +8,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge, BadgeProps } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { onCopy } from "@/hooks/use-copy";
 
 interface ApiAlertProps {
   title: string;
@@ -32,10 +33,12 @@ export const ApiAlert: FC<ApiAlertProps> = ({
 }) => {
   const [isCopy, setIsCopy] = useState(false);
 
-  const onCopy = () => {
-    navigator.clipboard.writeText(description);
-    toast.success("api route copied to the clipboard");
-    setIsCopy(true);
+  const onCopyText = () => {
+    const { success } = onCopy(description);
+    if (success) {
+      toast.success("api route copied to the clipboard");
+      setIsCopy(true);
+    }
   };
 
   return (
@@ -49,7 +52,7 @@ export const ApiAlert: FC<ApiAlertProps> = ({
         <code className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">
           {description}
         </code>
-        <Button variant={"outline"} size={"icon"} onClick={onCopy}>
+        <Button variant={"outline"} size={"icon"} onClick={onCopyText}>
           {isCopy === false ? (
             <Copy className="h-4 w-4" />
           ) : (
