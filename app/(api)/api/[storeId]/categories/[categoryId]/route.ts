@@ -81,7 +81,7 @@ export const PATCH = async (
 
     return NextResponse.json(category);
   } catch (error) {
-    console.log("Store_PATCH_ERROR", error);
+    console.log("CATEGORIES_PATCH_ERROR", error);
     return new NextResponse("Internal error", { status: 500 });
   }
 };
@@ -125,7 +125,7 @@ export const DELETE = async (
 
     return NextResponse.json(category);
   } catch (error) {
-    console.log("Store_PATCH_ERROR", error);
+    console.log("CATEGORIES_PATCH_ERROR", error);
     return new NextResponse("Internal error", { status: 500 });
   }
 };

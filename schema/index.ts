@@ -22,3 +22,19 @@ export const CategoriesSchema = z.object({
 });
 
 export type CategoriesSchemaValues = z.infer<typeof CategoriesSchema>;
+
+// 03 SizesSchema and their types
+export const SizesSchema = z.object({
+  name: z.string().min(1, { message: "name is required" }),
+  value: z.string().min(1, { message: "value is required" }),
+});
+
+export type SizesSchemaValues = z.infer<typeof SizesSchema>;
+
+// 03 ColorsSchema and their types
+export const ColorsSchema = z.object({
+  name: z.string().min(1, { message: "name is required" }),
+  value: z.string().min(4, { message: "value is required" }).regex(/^#/, { message: "String must be a valid hex code!" }),
+});
+
+export type ColorsSchemaValues = z.infer<typeof ColorsSchema>;

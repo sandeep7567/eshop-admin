@@ -1,43 +1,45 @@
 import prismadb from "@/lib/prismadb";
 import React from "react";
-import { BillboardForm } from "@/components/forms/billboard-form";
+
 import { isValidObjectId } from "@/lib/objectIdValidator";
 import { redirect } from "next/navigation";
+import { SizeForm } from "@/components/forms/size-form";
+import { ColorForm } from "@/components/forms/color-form";
 
-const BillboardsPage = async ({
+const ColorPage = async ({
   params,
 }: {
-  params: { storeId: string, billboardId: string };
+  params: { storeId: string, colorId: string };
 }) => {
 
-  const isObjectIDValid = isValidObjectId(params?.billboardId);
+  const isObjectIDValid = isValidObjectId(params?.colorId);
 
-  if (!isObjectIDValid && params.billboardId === "new") {
+  if (!isObjectIDValid && params.colorId === "new") {
     return (
       <div className="flex-col">
         <div className="flex-1 space-y-4 p-8">
-          <BillboardForm />
+          <ColorForm />
         </div>
       </div>
     );
   };
 
-  const billboard = await prismadb.billboard.findUnique({
-    where: { id: params?.billboardId },
+  const color = await prismadb.color.findUnique({
+    where: { id: params?.colorId },
   });
 
   // if billboard is null then conver it true by --> !billboard === !null === true;
-  if (!billboard) {
+  if (!color) {
     redirect("/");
   };
 
   return (
     <div className="flex-col">
       <div className="flex-1 space-y-4 p-8">
-        <BillboardForm initialData={billboard} />
+        <ColorForm initialData={color} />
       </div>
     </div>
   );
 };
 
-export default BillboardsPage;
+export default ColorPage;

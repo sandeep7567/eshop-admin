@@ -3,6 +3,7 @@
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
+import { Input } from "../ui/input";
 
 export const MainNav = ({
   className,
@@ -26,6 +27,16 @@ export const MainNav = ({
       href: `/${params.storeId}/categories`,
       label: "Categories",
       active: pathname === `/${params.storeId}/categories`,
+    },
+    {
+      href: `/${params.storeId}/sizes`,
+      label: "Sizes",
+      active: pathname === `/${params.storeId}/sizes`,
+    },
+    {
+      href: `/${params.storeId}/colors`,
+      label: "Colors",
+      active: pathname === `/${params.storeId}/colors`,
     },
     {
       href: `/${params.storeId}/settings`,
@@ -55,6 +66,8 @@ export const MainNav = ({
           {route?.label}
         </Link>
       ))}
+      {/* TODO:--> Dynamically add navbar routes=[{ label, href, pathname }] */}
+      {/* <Input className="h-7" onChange={(e) => console.log(e.target.value)}/> */}
     </nav>
   );
 };
