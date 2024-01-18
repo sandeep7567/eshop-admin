@@ -38,3 +38,18 @@ export const ColorsSchema = z.object({
 });
 
 export type ColorsSchemaValues = z.infer<typeof ColorsSchema>;
+
+// 03 ProductSchema and their types
+export const ProductsSchema = z.object({
+  name: z.string().min(1, { message: "name is required" }),
+  images: z.object({ url: z.string() }).array(),
+  price: z.coerce.number().min(1),
+  categoryId: z.string().min(1),
+  colorId: z.string().min(1),
+  sizeId: z.string().min(1),
+  isFeatured: z.boolean().default(false).optional(),
+  isArchived: z.boolean().default(false).optional(),
+
+});
+
+export type ProductSchemaValues = z.infer<typeof ProductsSchema>;
