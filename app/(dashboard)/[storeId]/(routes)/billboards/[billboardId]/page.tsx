@@ -22,6 +22,10 @@ const BillboardsPage = async ({
     );
   };
 
+  if (!isObjectIDValid) {
+    redirect("/");
+  };
+
   const billboard = await prismadb.billboard.findUnique({
     where: { id: params?.billboardId },
   });

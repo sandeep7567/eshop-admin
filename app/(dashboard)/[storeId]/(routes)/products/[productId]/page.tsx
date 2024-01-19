@@ -33,7 +33,11 @@ const ProductsPage = async ({
         </div>
       </div>
     );
-  }
+  };
+
+  if (!isObjectIDValid) {
+    redirect("/");
+  };
 
   const product = await prismadb.product.findUnique({
     where: { id: params?.productId },

@@ -24,6 +24,10 @@ const SizePage = async ({
     );
   };
 
+  if (!isObjectIDValid) {
+    redirect("/");
+  };
+
   const size = await prismadb.size.findUnique({
     where: { id: params?.sizeId },
   });

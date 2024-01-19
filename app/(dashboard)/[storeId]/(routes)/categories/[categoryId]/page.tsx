@@ -25,6 +25,10 @@ const CategoryPage = async ({ params }: { params: { categoryId: string, storeId:
     );
   };
 
+  if (!isObjectIDValid) {
+    redirect("/");
+  };
+
   const category = await prismadb.category.findUnique({
     where: { id: params?.categoryId },
   });

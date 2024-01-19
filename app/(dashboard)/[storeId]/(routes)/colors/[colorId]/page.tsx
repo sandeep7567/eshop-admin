@@ -24,6 +24,10 @@ const ColorPage = async ({
     );
   };
 
+  if (!isObjectIDValid) {
+    redirect("/");
+  };
+
   const color = await prismadb.color.findUnique({
     where: { id: params?.colorId },
   });
