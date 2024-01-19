@@ -7,6 +7,13 @@ export const SettingsSchema = z.object({
 
 export type SettingsSchemaValues = z.infer<typeof SettingsSchema>;
 
+// 01 PropertiesSchema and their types
+export const PropertiesSchema = z.object({
+  name: z.string().min(1),
+});
+
+export type PropertiesSchemaValues = z.infer<typeof PropertiesSchema>;
+
 // 02 BillboardsSchema and their types
 export const BillboardsSchema = z.object({
   label: z.string().min(1, { message: "label is required" }),

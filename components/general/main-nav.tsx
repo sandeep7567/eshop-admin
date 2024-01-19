@@ -4,15 +4,42 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import { Plus } from "lucide-react";
+import { NavModal } from "../modals/nav-model";
+import { Property } from "@prisma/client";
+import { useState } from "react";
+interface MainNavProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'property'> {
+  className: string;
+  property: Property[];
+}
 
-export const MainNav = ({
+export const MainNav: React.FC<MainNavProps> = ({
   className,
+  property,
   ...props
-}: React.HTMLAttributes<HTMLElement>) => {
+}) => {
   const pathname = usePathname();
   const params = useParams();
 
-  const routes = [
+  // dyanamic routes
+  const formattedProperty = property.map((prop) =>
+    prop.name.toLowerCase() === "overview"
+      ? {
+          href: `/${params.storeId}`,
+          label: `${prop.name.at(0)}${prop.name.slice(1)}`,
+          active: pathname === `/${params.storeId}`,
+        }
+      : {
+          href: `/${params.storeId}/${prop.name.toLowerCase()}`,
+          label: `${prop.name.at(0)}${prop.name.slice(1)}`,
+          active: pathname === `/${params.storeId}/${prop.name.toLowerCase()}`,
+        }
+  );
+
+  // static routes
+  const defaultRoute = [
+    ...formattedProperty,
     {
       href: `/${params.storeId}`,
       label: "Overview",
@@ -44,11 +71,22 @@ export const MainNav = ({
       active: pathname === `/${params.storeId}/products`,
     },
     {
+      href: `/${params.storeId}/orders`,
+      label: "Orders",
+      active: pathname === `/${params.storeId}/orders`,
+    },
+    {
       href: `/${params.storeId}/settings`,
       label: "Settings",
       active: pathname === `/${params.storeId}/settings`,
     },
   ];
+
+  const routing = !formattedProperty.length ? defaultRoute : formattedProperty;
+
+  const routes = [...formattedProperty];
+
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <nav
@@ -56,6 +94,7 @@ export const MainNav = ({
         "flex items-center justify-center space-x-4 lg:space-x-6",
         className
       )}
+      {...props}
     >
       {routes.map((route) => (
         <Link
@@ -72,7 +111,20 @@ export const MainNav = ({
         </Link>
       ))}
       {/* TODO:--> Dynamically add navbar routes=[{ label, href, pathname }] */}
-      {/* <Input className="h-7" onChange={(e) => console.log(e.target.value)}/> */}
+
+      <NavModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
+
+      {!isOpen ? (
+        <Button
+          onClick={() => {
+            setIsOpen(true);
+          }}
+          variant={"nav"}
+          size={"nav"}
+        >
+          <Plus />
+        </Button>
+      ) : null}
     </nav>
   );
 };

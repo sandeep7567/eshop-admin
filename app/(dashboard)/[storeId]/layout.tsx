@@ -46,7 +46,7 @@ export default async function DashboardLayout({
   return (
     <>
       <div className="">
-        <Navbar/>
+        <Navbar params={params}/>
         {children}
       </div>
     </>
