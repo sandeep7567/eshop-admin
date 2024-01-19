@@ -70,7 +70,7 @@ export const PATCH = async (
       return new NextResponse("Unathourized!", { status: 401 });
     };
 
-    const billboard = await prismadb.billboard.updateMany({
+    const billboard = await prismadb.billboard.update({
       where: {
         id: params.billboardId,
       },
@@ -117,7 +117,7 @@ export const DELETE = async (
       return new NextResponse("Unathourized!", { status: 401 });
     }
 
-    const billboard = await prismadb.billboard.deleteMany({
+    const billboard = await prismadb.billboard.delete({
       where: {
         id: params.billboardId,
       },

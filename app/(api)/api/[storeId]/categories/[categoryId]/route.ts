@@ -69,7 +69,7 @@ export const PATCH = async (
       return new NextResponse("Unathourized!", { status: 401 });
     }
 
-    const category = await prismadb.category.updateMany({
+    const category = await prismadb.category.update({
       where: {
         id: params.categoryId,
       },
@@ -117,7 +117,7 @@ export const DELETE = async (
       return new NextResponse("Unathourized!", { status: 401 });
     }
 
-    const category = await prismadb.category.deleteMany({
+    const category = await prismadb.category.delete({
       where: {
         id: params.categoryId,
       },

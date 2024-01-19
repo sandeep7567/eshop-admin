@@ -70,7 +70,7 @@ export const PATCH = async (
       return new NextResponse("Unathourized!", { status: 401 });
     };
 
-    const color = await prismadb.color.updateMany({
+    const color = await prismadb.color.update({
       where: {
         id: params.colorId,
       },
@@ -118,7 +118,7 @@ export const DELETE = async (
       return new NextResponse("Unathourized!", { status: 401 });
     }
 
-    const color = await prismadb.color.deleteMany({
+    const color = await prismadb.color.delete({
       where: {
         id: params.colorId,
       },

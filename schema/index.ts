@@ -42,11 +42,11 @@ export type ColorsSchemaValues = z.infer<typeof ColorsSchema>;
 // 03 ProductSchema and their types
 export const ProductsSchema = z.object({
   name: z.string().min(1, { message: "name is required" }),
-  images: z.object({ url: z.string() }).array(),
-  price: z.coerce.number().min(1),
-  categoryId: z.string().min(1),
-  colorId: z.string().min(1),
-  sizeId: z.string().min(1),
+  images: z.object({ url: z.string() }).array().min(1, { message: "upload atleast one product" }),
+  price: z.coerce.number().min(1, { message: "add atleast amount for this product"  }),
+  categoryId: z.string().min(1, { message: "add category one categoryId using Categories route" }),
+  colorId: z.string().min(1, { message: "add atleast one colorId using Colors route" }),
+  sizeId: z.string().min(1, { message: "add atleast one sizeId using Colors route" }),
   isFeatured: z.boolean().default(false).optional(),
   isArchived: z.boolean().default(false).optional(),
 

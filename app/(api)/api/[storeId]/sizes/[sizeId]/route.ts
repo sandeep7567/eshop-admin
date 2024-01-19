@@ -70,7 +70,7 @@ export const PATCH = async (
       return new NextResponse("Unathourized!", { status: 401 });
     };
 
-    const size = await prismadb.size.updateMany({
+    const size = await prismadb.size.update({
       where: {
         id: params.sizeId,
       },
@@ -117,7 +117,7 @@ export const DELETE = async (
       return new NextResponse("Unathourized!", { status: 401 });
     }
 
-    const size = await prismadb.size.deleteMany({
+    const size = await prismadb.size.delete({
       where: {
         id: params.sizeId,
       },
