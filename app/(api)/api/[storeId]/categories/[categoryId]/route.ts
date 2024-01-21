@@ -23,6 +23,9 @@ export const GET = async (
       where: {
         id: categoryId,
       },
+      include: {
+        billborad: true,
+      },
     });
 
     return NextResponse.json(category);
