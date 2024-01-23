@@ -131,17 +131,7 @@ export const SettingsForm: FC<SettingsFormProps> = ({
       <ApiAlert
         title="NEXT_PUBLIC_API_URL"
         description={`${origin}/api/${params.storeId}`}
-        variant="admin"
-      />
-      <ApiAlert
-        title="NEXT_PUBLIC_API_URL"
-        description={`${origin}/api/${params.storeId}`}
         variant="public"
-      />
-      <ApiAlert
-        title="NEXT_PUBLIC_API_URL"
-        description={`${origin}/api/${params.storeId}`}
-        variant="admin"
       />
     </>
   );

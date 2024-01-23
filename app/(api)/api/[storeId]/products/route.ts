@@ -103,7 +103,10 @@ export const GET = async (
     const categoryId = searchParams.get("categoryId") || undefined;
     const colorId = searchParams.get("colorId") || undefined;
     const sizeId = searchParams.get("sizeId") || undefined;
+    const priceId = searchParams.get("priceId") || undefined;
     const isFeatured = searchParams.get("isFeatured");
+
+    const [ priceLow, priceHigh ] = priceId?.split("-") || [];
 
     const products = await prismadb.product.findMany({
       where: {
@@ -113,6 +116,10 @@ export const GET = async (
         colorId,
         isFeatured: isFeatured ? true : undefined,
         isArchived: false,
+        price: {
+          gte: priceLow ? Number(priceLow) : undefined,
+          lte: priceHigh ? Number(priceHigh) : undefined,
+        }
       },
       include: {
         category: true,
