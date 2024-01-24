@@ -48,7 +48,7 @@ export type ColorsSchemaValues = z.infer<typeof ColorsSchema>;
 
 // 03 ProductSchema and their types
 export const ProductsSchema = z.object({
-  name: z.string().min(1, { message: "name is required" }),
+  name: z.string().toLowerCase().min(1, { message: "name is required" }),
   images: z.object({ url: z.string() }).array().min(1, { message: "upload atleast one product" }),
   price: z.coerce.number().min(1, { message: "add atleast amount for this product"  }),
   categoryId: z.string().min(1, { message: "add category one categoryId using Categories route" }),

@@ -23,7 +23,8 @@ const ProductPage = async ({ params }: { params: { storeId: string } }) => {
       images: true,
     },
     orderBy: {
-      createdAt: "desc",
+      // createdAt: "desc",
+      updatedAt: "desc",
     },
   });
 

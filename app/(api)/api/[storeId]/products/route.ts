@@ -103,10 +103,14 @@ export const GET = async (
     const categoryId = searchParams.get("categoryId") || undefined;
     const colorId = searchParams.get("colorId") || undefined;
     const sizeId = searchParams.get("sizeId") || undefined;
-    const priceId = searchParams.get("priceId") || undefined;
     const isFeatured = searchParams.get("isFeatured");
 
-    const [ priceLow, priceHigh ] = priceId?.split("-") || [];
+    const priceId = searchParams.get("priceId") || undefined;
+    const sortId = searchParams.get("sortId") || undefined;
+    const name = searchParams.get("name")?.toString() || "";
+
+    const [priceLow, priceHigh] = priceId?.split("-") || [];
+    const [sortName, sortValue] = sortId?.split("-") || ["createdAt", "desc"];
 
     const products = await prismadb.product.findMany({
       where: {
@@ -114,21 +118,24 @@ export const GET = async (
         categoryId,
         sizeId,
         colorId,
+        name: {
+          contains: name.toLowerCase(),
+        },
         isFeatured: isFeatured ? true : undefined,
         isArchived: false,
         price: {
           gte: priceLow ? Number(priceLow) : undefined,
           lte: priceHigh ? Number(priceHigh) : undefined,
-        }
+        },
       },
       include: {
         category: true,
         size: true,
         color: true,
-        images: true
+        images: true,
       },
       orderBy: {
-        createdAt: "desc",
+        [sortName]: sortValue === "desc" ? "desc" : "asc",
       },
     });
 

@@ -41,6 +41,11 @@ export const ProductColumns: ColumnDef<ProductColumn>[] = [
   {
     accessorKey: "name",
     header: "Name",
+    cell: ({ row }) => (
+      <div className="flex items-center gap-2 text-xs font-medium">
+        {row.original.name.toUpperCase()}
+      </div>
+    ),
   },
   {
     accessorKey: "isArchived",
