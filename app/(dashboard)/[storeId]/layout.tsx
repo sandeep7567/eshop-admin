@@ -1,11 +1,12 @@
 import { Inter } from "next/font/google";
 import type { Metadata } from "next";
 
-import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import prismadb from "@/lib/prismadb";
 import { Navbar } from "@/components/general/navbar";
 import { isValidObjectId } from "@/lib/objectIdValidator";
+import { ModalProvider } from "@/providers/modal-provider";
+import { useAuth } from "@/hooks/use-auth";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,32 +24,33 @@ export default async function DashboardLayout({
     storeId: string;
   };
 }) {
-  const { userId } = auth();
+  const { isAuth, userId, userInfo } = await useAuth();
 
-  if (!userId) {
-    redirect("/sign-in");
-  };
+  if (!isAuth) {
+    redirect("/");
+  }
 
   const isObjectIDValid = isValidObjectId(params?.storeId);
 
   if (!isObjectIDValid) {
     redirect("/");
-  };
+  }
 
   const store = await prismadb.store.findFirst({
-    where: { id: params.storeId, userId }
+    where: { id: params.storeId, userId },
   });
 
   if (!store) {
-    redirect("/error")
+    redirect("/error");
   };
 
   return (
     <>
-      <div className="">
-        <Navbar params={params}/>
+      <div>
+        <ModalProvider />
+        <Navbar params={params} />
         {children}
       </div>
     </>
-  )
+  );
 }

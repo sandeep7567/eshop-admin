@@ -1,5 +1,5 @@
+import { useAuth } from "@/hooks/use-auth";
 import prismadb from "@/lib/prismadb";
-import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 import * as z from "zod";
 
@@ -9,9 +9,39 @@ const formSchema = z.object({
   }),
 });
 
+export const GET = async (
+  req: Request,
+) => {
+  const { isAuth, userId } = await useAuth();
+  console.log({isAuth});
+  try {
+    if (!isAuth) {
+      return new NextResponse("authentication user required", { status: 400 });
+    };
+
+    const store = await prismadb.store.findFirst({
+      where: {
+        userId,
+      },
+    });
+    console.log({store});
+
+    if (!store) {
+      return new NextResponse("", { status: 200 });
+    };
+
+    return NextResponse.json(store);
+  } catch (error) {
+    console.log("[STORE_GET_ERROR]-->", error);
+    return new NextResponse("Internal error", { status: 500 });
+  }
+};
+
 export const POST = async (req: Request,) => {
   try {
-    const { userId } = auth();
+
+    const { isAuth, userInfo, userId } = await useAuth();
+
     const body = await req.json();
 
     const validatoresData = formSchema.safeParse(body);

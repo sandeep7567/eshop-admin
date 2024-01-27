@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useTransition } from "react";
 import axios from "axios";
 import { toast } from "sonner";
 import { PropertiesSchema, PropertiesSchemaValues } from "@/schema";

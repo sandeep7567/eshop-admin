@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 
 import { SizesSchema } from "@/schema";
 import prismadb from "@/lib/prismadb";
+import { useAuth } from "@/hooks/use-auth";
 
 
 export const GET = async (
@@ -38,7 +39,7 @@ export const PATCH = async (
   { params }: { params: { storeId: string; sizeId: string } }
 ) => {
   try {
-    const { userId } = auth();
+    const { userId } = await useAuth();
     const body = await req.json();
 
     if (!userId) {
@@ -92,7 +93,7 @@ export const DELETE = async (
   { params }: { params: { storeId: string; sizeId: string } }
 ) => {
   try {
-    const { userId } = auth();
+    const { userId } = await useAuth();
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });

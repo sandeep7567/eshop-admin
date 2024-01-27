@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import prismadb from "@/lib/prismadb";
 import { PropertiesSchema } from "@/schema";
-import { auth } from "@clerk/nextjs";
+import { useAuth } from "@/hooks/use-auth";
 
 // GET alL DATA
 export const GET = async (
@@ -41,7 +41,7 @@ export const POST = async (
   }
 ) => {
   try {
-    const { userId } = auth();
+    const { userId } = await useAuth();
     const body = await req.json();
     
     const validatoresData = PropertiesSchema.safeParse(body);

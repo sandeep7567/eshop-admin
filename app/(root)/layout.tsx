@@ -1,10 +1,13 @@
 import { Inter } from "next/font/google";
 import type { Metadata } from "next";
 
-import { PropsWithChildren } from "react";
-import { auth } from "@clerk/nextjs";
+import { PropsWithChildren, use } from "react";
+// import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import prismadb from "@/lib/prismadb";
+import { auth } from "@/auth";
+import { useAuth } from "@/hooks/use-auth";
+import { UseAccountModal } from "@/hooks/use-account-modal";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,15 +17,16 @@ export const metadata: Metadata = {
 };
 
 export default async function SetupLayout({ children }: PropsWithChildren) {
-  const {userId} = auth();
 
-  if (!userId) {
+  const { isAuth, userId } = await useAuth();
+
+  if (!isAuth) {
     redirect("/sign-in");
   };
 
   const store = await prismadb.store.findFirst({
     where: {
-      userId
+      userId,
     }
   });
 

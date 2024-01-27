@@ -1,8 +1,8 @@
-import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
 import { BillboardsSchema } from "@/schema";
 import prismadb from "@/lib/prismadb";
+import { useAuth } from "@/hooks/use-auth";
 
 // get specific billboard by a billboardId;
 export const GET = async (
@@ -38,7 +38,7 @@ export const PATCH = async (
   { params }: { params: { storeId: string; billboardId: string } }
 ) => {
   try {
-    const { userId } = auth();
+    const { isAuth, userInfo, userId } = await useAuth();
     const body = await req.json();
 
     if (!userId) {
@@ -92,7 +92,7 @@ export const DELETE = async (
   { params }: { params: { storeId: string; billboardId: string } }
 ) => {
   try {
-    const { userId } = auth();
+    const { isAuth, userInfo, userId } = await useAuth();
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });

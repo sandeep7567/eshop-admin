@@ -1,9 +1,10 @@
 import { MainNav } from "@/components/general/main-nav";
 
-import { UserButton, auth } from "@clerk/nextjs";
 import { StoreSwitcher } from "@/components/general/store-switcher";
 import prismadb from "@/lib/prismadb";
 import { redirect } from "next/navigation";
+import { useAuth } from "@/hooks/use-auth";
+import { UserNavButton } from "./user-nav-button";
 
 export const Navbar = async ({
   params,
@@ -12,9 +13,9 @@ export const Navbar = async ({
     storeId: string;
   };
 }) => {
-  const { userId } = auth();
+  const { isAuth, userId, userInfo } = await useAuth();
 
-  if (!userId) {
+  if (!isAuth) {
     redirect("/sign-in");
   }
 
@@ -36,7 +37,8 @@ export const Navbar = async ({
         <StoreSwitcher items={stores} />
         <MainNav className="mx-6" property={property} />
         <div className="ml-auto flex items-center space-x-4">
-          <UserButton afterSignOutUrl="/" />
+          {/* <UserButton afterSignOutUrl="/" /> */}
+          <UserNavButton stores={stores} userInfo={userInfo}/>
         </div>
       </div>
     </div>

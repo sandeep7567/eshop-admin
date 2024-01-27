@@ -1,6 +1,6 @@
+import { useAuth } from "@/hooks/use-auth";
 import prismadb from "@/lib/prismadb";
 import { CategoriesSchema } from "@/schema";
-import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
 export const POST = async (
@@ -12,7 +12,7 @@ export const POST = async (
   }
 ) => {
   try {
-    const { userId } = auth();
+    const { isAuth, userInfo, userId } = await useAuth();
     const body = await req.json();
 
     const validatoresData = CategoriesSchema.safeParse(body);

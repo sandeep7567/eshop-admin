@@ -46,11 +46,11 @@ export const POST = async (req: Request) => {
 
     console.log({passwordMatch});
     
-    // await signIn("credentials", {
-    //   email,
-    //   password,
-    //   redirect: false,
-    // });
+    await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    });
 
     const user = {
       id: existingUser?.id,
