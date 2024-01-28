@@ -24,7 +24,7 @@ export default async function DashboardLayout({
     storeId: string;
   };
 }) {
-  const { isAuth, userId, userInfo } = await useAuth();
+  const { isAuth, userId } = await useAuth();
 
   if (!isAuth) {
     redirect("/");

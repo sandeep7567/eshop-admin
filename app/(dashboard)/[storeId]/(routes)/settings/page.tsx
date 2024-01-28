@@ -1,6 +1,6 @@
 import { SettingsForm } from "@/components/forms/settings-form";
+import { useAuth } from "@/hooks/use-auth";
 import prismadb from "@/lib/prismadb";
-import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
 interface SettingsPageProps {
@@ -10,9 +10,9 @@ interface SettingsPageProps {
 }
 
 const SettingsPage = async ({ params }: SettingsPageProps) => {
-  const { userId } = auth();
+  const { isAuth, userId } = await useAuth();
 
-  if (!userId) {
+  if (!isAuth) {
     redirect("/sign-in");
   }
 
