@@ -128,7 +128,7 @@ export const LoginForm: FC<LoginFormProps> = () => {
                       disabled={isPending}
                       {...field}
                       type="password"
-                      placeholder="******"
+                      placeholder="123456"
                     />
                   </FormControl>
                   <FormDescription />
