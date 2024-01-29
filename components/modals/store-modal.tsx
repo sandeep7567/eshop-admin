@@ -44,7 +44,6 @@ export const StoreModal = () => {
     startTransition(async () => {
       try {
         const res = await axios.post(`/api/stores`, values);
-        console.log(res);
         if (res?.data && res?.data) {
           window?.location?.assign(`/${res?.data.id}`);
         }

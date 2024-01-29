@@ -13,7 +13,7 @@ const SettingsPage = async ({ params }: SettingsPageProps) => {
   const { isAuth, userId } = await useAuth();
 
   if (!isAuth) {
-    redirect("/sign-in");
+    redirect("/auth/login");
   }
 
   const store = await prismadb.store.findFirst({

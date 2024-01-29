@@ -1,14 +1,14 @@
-import prismadb from "@/lib/prismadb";
-
 import NextAuth from "next-auth";
 import { UserRole } from "@prisma/client";
+
 import { PrismaAdapter } from "@auth/prisma-adapter";
+import prismadb from "@/lib/prismadb";
 
 import authConfig from "@/auth.config";
 import { getUserById } from "@/data/user";
 import { getAccountByUserId } from "./data/account";
 
-export const AUTH_SECRET = `${process.env.AUTH_SECRET}`;
+export const AUTH_SECRET = `${process.env.AUTH_SECRET}` as string;
 
 export const {
   handlers: { GET, POST },
@@ -17,23 +17,73 @@ export const {
   signOut,
 } = NextAuth({
   pages: {
-    signIn: "/sign-in",
+    signIn: "/auth/login",
     error: "/auth/error",
   },
   // events: {
   //   async linkAccount({ user }) {
-  //     await db.user.update({
+  //     await prismadb.user.update({
   //       where: { id: user.id },
-  //       data: { emailVerified: new Date() }
-  //     })
-  //   }
+  //       data: { emailVerified: new Date() },
+  //     });
+  //   },
   // },
   callbacks: {
-    async signIn({ user, account, credentials }) {
+    async signIn({ user, account, profile }) {
       // Allow OAuth without email verification
-      if (account?.provider !== "credentials") return true;
+      if (account && account?.provider !== "credentials") {
+        return true;
+      } else if (account && account?.provider === ("github" || "google")) {
+        await prisma?.user.upsert({
+          where: {
+            email: profile?.email as string,
+          },
+          update: {
+            image: profile?.picture
+          },
+          create: {
+            // id: user?.id && user?.id.toString(), // Convert GitHub user ID to a string
+            name: profile?.name,
+            email: profile?.email,
+            image: profile?.picture,
+            accounts: {
+              create: {
+                provider: account?.provider,
+                providerAccountId: account?.providerAccountId,
+                access_token: account?.access_token,
+                token_type: account?.token_type,
+                scope: account?.scope,
+                type: account?.type,
+              },
+            },
+          },
+        });
+
+        return true
+      };
 
       const existingUser = await getUserById(user.id!);
+
+      const userAccountExisting = await prismadb.account.findFirst({
+        where: {
+          userId: existingUser?.id,
+        },
+      });
+
+      if (!userAccountExisting) {
+        const userAccount = await prismadb.account.create({
+          data: {
+            userId: existingUser?.id,
+            provider: account?.provider,
+            providerAccountId: account?.providerAccountId,
+            type: account?.type,
+          } as any,
+        });
+
+        if (!userAccount) return false;
+
+        return true;
+      }
 
       // Prevent sign in without email verification
       // if (!existingUser?.emailVerified) return false;
@@ -43,11 +93,13 @@ export const {
 
       //   if (!twoFactorConfirmation) return false;
 
-      //   // Delete two factor confirmation for next sign in
-      //   await db.twoFactorConfirmation.delete({
-      //     where: { id: twoFactorConfirmation.id }
-      //   });
+      // // Delete two factor confirmation for next sign in
+      // await prismadb.twoFactorConfirmation.delete({
+      //   where: { id: twoFactorConfirmation.id }
+      // });
       // }
+
+      if (!userAccountExisting) return false;
 
       if (existingUser?.id !== user?.id) return false;
 
@@ -95,5 +147,6 @@ export const {
   adapter: PrismaAdapter(prismadb),
   session: { strategy: "jwt" },
   secret: AUTH_SECRET,
+  debug: process.env.NODE_ENV !== "production",
   ...authConfig,
 });

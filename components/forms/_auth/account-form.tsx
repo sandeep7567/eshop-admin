@@ -15,7 +15,7 @@ export const AccountForm: FC<AccountFormProps> = ({ mode = "modal" }) => {
   const [form, setForm] = useState(false);
 
   if (mode === "redirect") {
-    redirect("/sign-in");
+    redirect("/auth/login");
   }
 
   if (form) {

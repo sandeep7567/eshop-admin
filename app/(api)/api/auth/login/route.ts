@@ -43,8 +43,6 @@ export const POST = async (req: Request) => {
     if (!passwordMatch) {
       return new NextResponse("password mismatch!", { status: 400 });
     }
-
-    console.log({passwordMatch});
     
     await signIn("credentials", {
       email,

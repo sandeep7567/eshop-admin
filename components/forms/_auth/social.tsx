@@ -5,22 +5,25 @@
 // import { FaGithub } from "react-icons/fa";
 import { useSearchParams } from "next/navigation";
 
-import {Button} from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
+import { signIn } from "next-auth/react";
 
 export const Social = () => {
   const searchParams = useSearchParams();
   // const callbackUrl = searchParams.get("callbackUrl");
 
-  // const onClick = (provider: "google" | "github") => {
-  //   signIn(provider, {
-  //     callbackUrl: callbackUrl || DEFAULT_LOGIN_REDIRECT,
-  //   });
-  // }
+  const onClick = async (provider: "google" | "github") => {
+    signIn(provider);
+  };
 
   return (
     <div className="flex items-center w-full gap-x-2 mt-4">
-      <Button className="w-full flex justify-center items-center gap-x-3 h-10" onClick={() => {}}>
-        {/* <div cl> */}
+      {/* Google Button */}
+      <Button
+        className="w-full flex justify-center items-center gap-x-3 h-10"
+        onClick={() => onClick("google")}
+      >
+        {/* <div /> */}
 
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -28,13 +31,18 @@ export const Social = () => {
           fill="currentColor"
           viewBox="0 0 488 496"
           className="h-5 w-5"
-          >
+        >
           <path d="M 488 254 Q 486 362 422 428 L 422 428 Q 357 494 248 496 Q 179 495 123 462 Q 67 429 34 373 Q 1 317 0 248 Q 1 179 34 123 Q 67 67 123 34 Q 179 1 248 0 Q 349 2 414 65 L 347 130 Q 300 88 242 92 Q 184 95 140 136 Q 97 178 94 248 Q 96 315 139 359 Q 183 403 248 405 Q 297 404 327 385 Q 357 366 372 342 Q 386 317 389 298 L 248 298 L 248 212 L 484 212 Q 488 230 488 254 L 488 254 Z" />
         </svg>
-          <div className="text-white">Google</div>
+        <div className="text-white">Google</div>
         {/* </div> */}
       </Button>
-      <Button className="w-full flex items-center gap-x-3 justify-center h-10" onClick={() => {}}>
+
+      {/* Github Button */}
+      <Button
+        className="w-full flex items-center gap-x-3 justify-center h-10"
+        onClick={() => onClick("github")}
+      >
         {/* github */}
         <svg
           xmlns="http://www.w3.org/2000/svg"

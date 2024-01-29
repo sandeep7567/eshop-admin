@@ -21,7 +21,7 @@ export default async function SetupLayout({ children }: PropsWithChildren) {
   const { isAuth, userId } = await useAuth();
 
   if (!isAuth) {
-    redirect("/sign-in");
+    redirect("/auth/login");
   };
 
   const store = await prismadb.store.findFirst({

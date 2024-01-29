@@ -13,7 +13,7 @@ export const GET = async (
   req: Request,
 ) => {
   const { isAuth, userId } = await useAuth();
-  console.log({isAuth});
+
   try {
     if (!isAuth) {
       return new NextResponse("authentication user required", { status: 400 });
@@ -24,7 +24,6 @@ export const GET = async (
         userId,
       },
     });
-    console.log({store});
 
     if (!store) {
       return new NextResponse("", { status: 200 });

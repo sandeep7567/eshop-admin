@@ -25,10 +25,10 @@ import { useSession } from "next-auth/react";
 interface LoginFormProps {}
 
 export const LoginForm: FC<LoginFormProps> = () => {
-
+  
+  const NEXT_PUBLIC_API_AUTH_URL = process.env.NEXT_PUBLIC_API_AUTH_URL;
   const { data: session } = useSession();
   const router = useRouter();
-  console.log(session);
 
   // Store Control
   const onOpen = useStoreModal((state) => state.onOpen);
@@ -39,7 +39,6 @@ export const LoginForm: FC<LoginFormProps> = () => {
   const onCloseAccount = UseAccountModal((state) => state.onClose);
   const isOpenAccount = UseAccountModal((state) => state.isOpen);
 
-  const NEXT_PUBLIC_API_AUTH_URL = process.env.NEXT_PUBLIC_API_AUTH_URL;
 
   useEffect(() => {
 
@@ -47,14 +46,12 @@ export const LoginForm: FC<LoginFormProps> = () => {
       (async () => {
         try {
           const { data } = await axios.get(`/api/stores`);
-          console.log(!!data);
 
           if (session && !data) {
             onOpen();
           }
 
           if (session && data) {
-            console.log("object");
             router.refresh();
             router.push(`/${data?.id}`);
           }
@@ -76,7 +73,6 @@ export const LoginForm: FC<LoginFormProps> = () => {
         );
         toast.success("login success!");
         if (res?.data?.success) {
-          console.log("object");
           router.push("/");
           onCloseAccount();
           router.refresh();
