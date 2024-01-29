@@ -5,6 +5,7 @@ import prismadb from "@/lib/prismadb";
 import { redirect } from "next/navigation";
 import { useAuth } from "@/hooks/use-auth";
 import { UserNavButton } from "./user-nav-button";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 export const Navbar = async ({
   params,
@@ -38,6 +39,7 @@ export const Navbar = async ({
         <MainNav className="mx-6" property={property} />
         <div className="ml-auto flex items-center space-x-4">
           {/* <UserButton afterSignOutUrl="/" /> */}
+          <ThemeToggle />
           <UserNavButton stores={stores} userInfo={userInfo}/>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import { Inter } from "next/font/google";
 import type { Metadata } from "next";
 
+import { ThemeProvider } from "@/providers/theme-provider";
 import { ModalProvider } from "@/providers/modal-provider";
 import { ToastProvider } from "@/providers/toast-provider";
 import { SessionProvider } from "next-auth/react";
@@ -24,11 +25,18 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ToastProvider />
-        <SessionProvider session={user}>
-          <ModalProvider />
-          {children}
-        </SessionProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <ToastProvider />
+          <SessionProvider session={user}>
+            <ModalProvider />
+            {children}
+          </SessionProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
