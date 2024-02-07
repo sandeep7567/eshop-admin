@@ -20,70 +20,22 @@ export const {
     signIn: "/auth/login",
     error: "/auth/error",
   },
-  // events: {
-  //   async linkAccount({ user }) {
-  //     await prismadb.user.update({
-  //       where: { id: user.id },
-  //       data: { emailVerified: new Date() },
-  //     });
-  //   },
-  // },
+  events: {
+    async linkAccount({ user }) {
+      await prismadb.user.update({
+        where: { id: user.id },
+        data: { emailVerified: new Date() },
+      });
+    },
+  },
   callbacks: {
-    async signIn({ user, account, profile }) {
+    async signIn({ user, account }) {
       // Allow OAuth without email verification
       if (account && account?.provider !== "credentials") {
         return true;
-      } else if (account && account?.provider === ("github" || "google")) {
-        await prisma?.user.upsert({
-          where: {
-            email: profile?.email as string,
-          },
-          update: {
-            image: profile?.picture
-          },
-          create: {
-            // id: user?.id && user?.id.toString(), // Convert GitHub user ID to a string
-            name: profile?.name,
-            email: profile?.email,
-            image: profile?.picture,
-            accounts: {
-              create: {
-                provider: account?.provider,
-                providerAccountId: account?.providerAccountId,
-                access_token: account?.access_token,
-                token_type: account?.token_type,
-                scope: account?.scope,
-                type: account?.type,
-              },
-            },
-          },
-        });
-
-        return true
-      };
+      }
 
       const existingUser = await getUserById(user.id!);
-
-      const userAccountExisting = await prismadb.account.findFirst({
-        where: {
-          userId: existingUser?.id,
-        },
-      });
-
-      if (!userAccountExisting) {
-        const userAccount = await prismadb.account.create({
-          data: {
-            userId: existingUser?.id,
-            provider: account?.provider,
-            providerAccountId: account?.providerAccountId,
-            type: account?.type,
-          } as any,
-        });
-
-        if (!userAccount) return false;
-
-        return true;
-      }
 
       // Prevent sign in without email verification
       // if (!existingUser?.emailVerified) return false;
@@ -98,8 +50,6 @@ export const {
       //   where: { id: twoFactorConfirmation.id }
       // });
       // }
-
-      if (!userAccountExisting) return false;
 
       if (existingUser?.id !== user?.id) return false;
 

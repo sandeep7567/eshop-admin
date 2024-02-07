@@ -18,13 +18,6 @@ export default {
     Github({
       clientId: process.env.GITHUB_CLIENT_ID as string,
       clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
-      profile(profile) {
-        return {
-          name: profile.name ?? profile.login,
-          email: profile.email,
-          image: profile.avatar_url,
-        }
-      },
     }),
     Credentials({
       async authorize(credentials) {

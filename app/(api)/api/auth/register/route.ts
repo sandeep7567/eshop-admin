@@ -30,10 +30,10 @@ export const POST = async (req: Request) => {
     const existingUser = await getUserByEmail(email);
 
     if (existingUser) {
-      return { error: "Email already in use!" };
+      return  new NextResponse("Email already in use!", { status: 400 });
     }
 
-    const user = await prismadb.user.create({
+    await prismadb.user.create({
       data: {
         name,
         email,

@@ -21,23 +21,24 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const user = await auth();
+  const session = await auth();
+
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <ToastProvider />
-          <SessionProvider session={user}>
+    <SessionProvider session={session}>
+      <html lang="en">
+        <body className={inter.className}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <ToastProvider />
             <ModalProvider />
             {children}
-          </SessionProvider>
-        </ThemeProvider>
-      </body>
-    </html>
+          </ThemeProvider>
+        </body>
+      </html>
+    </SessionProvider>
   );
 }

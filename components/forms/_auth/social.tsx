@@ -1,20 +1,23 @@
 "use client";
 
-// import { signIn } from "next-auth/react";
-// import { FcGoogle } from "react-icons/fc";
-// import { FaGithub } from "react-icons/fa";
-import { useSearchParams } from "next/navigation";
-
 import { Button } from "@/components/ui/button";
-import { signIn } from "next-auth/react";
+import { login } from "@/actions/signin";
+import { redirect, useSearchParams } from "next/navigation";
 
 export const Social = () => {
   const searchParams = useSearchParams();
-  // const callbackUrl = searchParams.get("callbackUrl");
+  const error = searchParams.get("error");
+  console.log(error);
+  if (error) {
+    redirect(`/auth/error`);
+  }
 
-  const onClick = async (provider: "google" | "github") => {
-    return null
-    // signIn(provider);
+  const onSocial = async (provider: "google" | "github") => {
+    try {
+      await login(provider);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -23,7 +26,7 @@ export const Social = () => {
       <Button
         variant={"default"}
         className="w-full flex justify-center items-center gap-x-3 h-10"
-        onClick={() => onClick("google")}
+        onClick={() => onSocial("google")}
       >
         {/* <div /> */}
 
@@ -44,7 +47,7 @@ export const Social = () => {
       <Button
         variant={"default"}
         className="w-full flex items-center gap-x-3 justify-center h-10"
-        onClick={() => onClick("github")}
+        onClick={() => onSocial("github")}
       >
         {/* github */}
         <svg
