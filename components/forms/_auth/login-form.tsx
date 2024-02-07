@@ -35,9 +35,7 @@ export const LoginForm: FC<LoginFormProps> = () => {
   const isOpen = useStoreModal((state) => state.isOpen);
 
   // Account Control
-  const onOpenAccount = UseAccountModal((state) => state.onOpen);
   const onCloseAccount = UseAccountModal((state) => state.onClose);
-  const isOpenAccount = UseAccountModal((state) => state.isOpen);
 
 
   useEffect(() => {
@@ -60,7 +58,7 @@ export const LoginForm: FC<LoginFormProps> = () => {
         }
       })();
     }
-  }, [onOpen, isOpen, session, onOpen, router]);
+  }, [isOpen, session, onOpen, router]);
 
   const [isPending, startTransition] = useTransition();
 

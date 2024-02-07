@@ -1,6 +1,4 @@
 import { auth } from "@/auth";
-import { ExtendedUser } from "@/next-auth";
-import { User } from "next-auth";
 
 export const useAuth = async () => {
   const user = await auth();

@@ -96,8 +96,8 @@ export const NavModal: React.FC<NavModalProps> = ({
       <div>
         <div className="space-y-4 py-2 pb-4">
           <div className="flex justify-center items-center flex-wrap gap-2">
-            {navData.map((title) => (
-              <div className="p-1.5 text-sm bg-muted-foreground text-muted rounded-md">
+            {navData.map((title, i) => (
+              <div key={i} className="p-1.5 text-sm bg-muted-foreground text-muted rounded-md">
                 {title}
               </div>
             ))}
