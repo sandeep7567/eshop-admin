@@ -25,8 +25,6 @@ import { useSession } from "next-auth/react";
 interface LoginFormProps {}
 
 export const LoginForm: FC<LoginFormProps> = () => {
-  
-  const NEXT_PUBLIC_API_AUTH_URL = process.env.NEXT_PUBLIC_API_AUTH_URL;
   const { data: session } = useSession();
   const router = useRouter();
 
@@ -66,7 +64,7 @@ export const LoginForm: FC<LoginFormProps> = () => {
     startTransition(async () => {
       try {
         const res = await axios.post(
-          `${NEXT_PUBLIC_API_AUTH_URL}/login`,
+          `/api/auth/login`,
           values
         );
         toast.success("login success!");

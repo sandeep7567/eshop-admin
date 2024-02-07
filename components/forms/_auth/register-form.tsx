@@ -20,7 +20,6 @@ import { toast } from "sonner";
 interface RegisterFormProps {}
 
 export const RegisterForm: FC<RegisterFormProps> = () => {
-  const NEXT_PUBLIC_API_AUTH_URL = process.env.NEXT_PUBLIC_API_AUTH_URL;
 
   const [isPending, startTransition] = useTransition();
 
@@ -28,7 +27,7 @@ export const RegisterForm: FC<RegisterFormProps> = () => {
     startTransition(async () => {
       try {
         const res = await axios.post(
-          `${NEXT_PUBLIC_API_AUTH_URL}/register`,
+          `/api/auth/register`,
           values
         );
         if (res?.data) {
