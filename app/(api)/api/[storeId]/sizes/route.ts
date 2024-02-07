@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import prismadb from "@/lib/prismadb";
 
 import { SizesSchema } from "@/schema";
-import { useAuth } from "@/hooks/use-auth";
+import { auth } from "@/auth";
 
 export const POST = async (
   req: Request,
@@ -13,7 +13,8 @@ export const POST = async (
   }
 ) => {
   try {
-    const { userId } = await useAuth();
+    const session = await auth();
+  const userId = session?.user?.id;
     const body = await req.json();
 
     const validatoresData = SizesSchema.safeParse(body);

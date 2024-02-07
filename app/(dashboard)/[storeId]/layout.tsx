@@ -6,7 +6,8 @@ import prismadb from "@/lib/prismadb";
 import { Navbar } from "@/components/general/navbar";
 import { isValidObjectId } from "@/lib/objectIdValidator";
 import { ModalProvider } from "@/providers/modal-provider";
-import { useAuth } from "@/hooks/use-auth";
+
+import { auth } from "@/auth";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,7 +25,9 @@ export default async function DashboardLayout({
     storeId: string;
   };
 }) {
-  const { isAuth, userId } = await useAuth();
+  const session = await auth();
+  const isAuth = session?.user?.id ? true : false;
+  const userId = session?.user?.id;
 
   if (!isAuth) {
     redirect("/");

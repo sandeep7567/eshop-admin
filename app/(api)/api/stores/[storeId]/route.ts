@@ -2,14 +2,17 @@ import { NextResponse } from "next/server";
 
 import { SettingsSchema } from "@/schema";
 import prismadb from "@/lib/prismadb";
-import { useAuth } from "@/hooks/use-auth";
+import { auth } from "@/auth";
+
 
 export const PATCH = async (
   req: Request,
   { params }: { params: { storeId: string } }
 ) => {
   try {
-    const { isAuth, userInfo, userId } = await useAuth();
+    const session = await auth();
+    const userId = session?.user?.id;
+
     const body = await req.json();
 
     if (!userId) {
@@ -52,7 +55,8 @@ export const DELETE = async (
   { params }: { params: { storeId: string } }
 ) => {
   try {
-    const { isAuth, userInfo, userId } = await useAuth();
+    const session = await auth();
+    const userId = session?.user?.id;
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });

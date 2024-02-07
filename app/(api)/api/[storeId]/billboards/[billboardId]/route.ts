@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 import { BillboardsSchema } from "@/schema";
 import prismadb from "@/lib/prismadb";
-import { useAuth } from "@/hooks/use-auth";
+import { auth } from "@/auth";
 
 // get specific billboard by a billboardId;
 export const GET = async (
@@ -38,7 +38,9 @@ export const PATCH = async (
   { params }: { params: { storeId: string; billboardId: string } }
 ) => {
   try {
-    const { isAuth, userInfo, userId } = await useAuth();
+    const session = await auth();
+    const userId = session?.user?.id;
+
     const body = await req.json();
 
     if (!userId) {
@@ -68,7 +70,7 @@ export const PATCH = async (
 
     if (!storeByUserId) {
       return new NextResponse("Unathourized!", { status: 401 });
-    };
+    }
 
     const billboard = await prismadb.billboard.update({
       where: {
@@ -92,7 +94,8 @@ export const DELETE = async (
   { params }: { params: { storeId: string; billboardId: string } }
 ) => {
   try {
-    const { isAuth, userInfo, userId } = await useAuth();
+    const session = await auth();
+    const userId = session?.user?.id;
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });

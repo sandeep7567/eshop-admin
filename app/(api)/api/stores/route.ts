@@ -1,4 +1,4 @@
-import { useAuth } from "@/hooks/use-auth";
+import { auth } from "@/auth";
 import prismadb from "@/lib/prismadb";
 import { NextResponse } from "next/server";
 import * as z from "zod";
@@ -12,7 +12,9 @@ const formSchema = z.object({
 export const GET = async (
   req: Request,
 ) => {
-  const { isAuth, userId } = await useAuth();
+  const session = await auth();
+  const isAuth = session && session?.user?.id ? true : false;
+  const userId = session?.user?.id;
 
   try {
     if (!isAuth) {
@@ -39,7 +41,8 @@ export const GET = async (
 export const POST = async (req: Request,) => {
   try {
 
-    const { isAuth, userInfo, userId } = await useAuth();
+    const session = await auth();
+    const userId = session?.user?.id;
 
     const body = await req.json();
 

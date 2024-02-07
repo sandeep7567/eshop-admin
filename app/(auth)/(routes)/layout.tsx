@@ -1,4 +1,3 @@
-import { ModalProvider } from '@/providers/modal-provider';
 import { FC } from 'react'
 
 interface AuthLayoutProps {

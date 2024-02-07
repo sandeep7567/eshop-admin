@@ -1,10 +1,9 @@
-import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
 import { SizesSchema } from "@/schema";
 import prismadb from "@/lib/prismadb";
-import { useAuth } from "@/hooks/use-auth";
 
+import { auth } from "@/auth";
 
 export const GET = async (
   req: Request,
@@ -39,7 +38,9 @@ export const PATCH = async (
   { params }: { params: { storeId: string; sizeId: string } }
 ) => {
   try {
-    const { userId } = await useAuth();
+    const session = await auth();
+    const userId = session?.user?.id;
+
     const body = await req.json();
 
     if (!userId) {
@@ -53,7 +54,7 @@ export const PATCH = async (
     }
 
     const {
-      data: { name, value  },
+      data: { name, value },
     } = validatorData;
 
     if (!params.sizeId) {
@@ -69,7 +70,7 @@ export const PATCH = async (
 
     if (!storeByUserId) {
       return new NextResponse("Unathourized!", { status: 401 });
-    };
+    }
 
     const size = await prismadb.size.update({
       where: {
@@ -93,7 +94,8 @@ export const DELETE = async (
   { params }: { params: { storeId: string; sizeId: string } }
 ) => {
   try {
-    const { userId } = await useAuth();
+    const session = await auth();
+    const userId = session?.user?.id;
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });

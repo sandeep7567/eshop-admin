@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 import { ProductsSchema } from "@/schema";
 import prismadb from "@/lib/prismadb";
-import { useAuth } from "@/hooks/use-auth";
+import { auth } from "@/auth";
 
 // get specific product by a productId;
 export const GET = async (
@@ -45,7 +45,9 @@ export const PATCH = async (
   { params }: { params: { storeId: string; productId: string } }
 ) => {
   try {
-    const { userId } = await useAuth();
+    const session = await auth();
+  const userId = session?.user?.id;
+
     const body = await req.json();
 
     if (!userId) {
@@ -122,7 +124,8 @@ export const DELETE = async (
   { params }: { params: { storeId: string; productId: string } }
 ) => {
   try {
-    const { userId } = await useAuth();
+    const session = await auth();
+  const userId = session?.user?.id;
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });

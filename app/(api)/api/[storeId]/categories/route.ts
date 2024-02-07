@@ -1,4 +1,4 @@
-import { useAuth } from "@/hooks/use-auth";
+import { auth } from "@/auth";
 import prismadb from "@/lib/prismadb";
 import { CategoriesSchema } from "@/schema";
 import { NextResponse } from "next/server";
@@ -12,7 +12,9 @@ export const POST = async (
   }
 ) => {
   try {
-    const { isAuth, userInfo, userId } = await useAuth();
+    const session = await auth();
+    const userId = session?.user?.id;
+    
     const body = await req.json();
 
     const validatoresData = CategoriesSchema.safeParse(body);
@@ -27,13 +29,13 @@ export const POST = async (
 
     if (!userId || typeof userId !== "string") {
       return new NextResponse("Unauthenticated!", { status: 401 });
-    };
+    }
 
     const { storeId } = params;
 
     if (!storeId) {
       return new NextResponse("store not found!", { status: 400 });
-    };
+    }
 
     const storeByUserId = await prismadb.store.findFirst({
       where: {
@@ -44,7 +46,7 @@ export const POST = async (
 
     if (!storeByUserId) {
       return new NextResponse("Unathourized!", { status: 401 });
-    };
+    }
 
     const category = await prismadb.category.create({
       data: {
@@ -70,22 +72,21 @@ export const GET = async (
   }
 ) => {
   try {
-
     if (!params?.storeId) {
       return new NextResponse("Store id is required", { status: 400 });
-    };
+    }
 
     const { storeId } = params;
 
     const categories = await prismadb.category.findMany({
       where: {
-        storeId
-      }
+        storeId,
+      },
     });
 
     return NextResponse.json(categories);
   } catch (error) {
     console.log("[CATEGORIES_GET_ERROR]-->", error);
     return new NextResponse("Internal error", { status: 500 });
-  };
+  }
 };

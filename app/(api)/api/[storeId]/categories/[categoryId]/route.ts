@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 import prismadb from "@/lib/prismadb";
 import { CategoriesSchema } from "@/schema";
-import { useAuth } from "@/hooks/use-auth";
+import { auth } from "@/auth";
 
 export const GET = async (
   req: Request,
@@ -40,7 +40,9 @@ export const PATCH = async (
   { params }: { params: { storeId: string; categoryId: string } }
 ) => {
   try {
-    const { userId } = await useAuth();
+    const session = await auth();
+    const userId = session?.user?.id;
+
     const body = await req.json();
 
     if (!userId) {
@@ -48,7 +50,7 @@ export const PATCH = async (
     }
 
     const validatorData = CategoriesSchema.safeParse(body);
-    
+
     if (!validatorData.success) {
       return new NextResponse("Label/BillboardId required", { status: 400 });
     }
@@ -94,7 +96,8 @@ export const DELETE = async (
   { params }: { params: { storeId: string; categoryId: string } }
 ) => {
   try {
-    const { userId } = await useAuth();
+    const session = await auth();
+    const userId = session?.user?.id;
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });

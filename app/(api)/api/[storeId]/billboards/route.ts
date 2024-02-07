@@ -1,5 +1,4 @@
-import { useAuth } from "@/hooks/use-auth";
-
+import { auth } from "@/auth";
 import prismadb from "@/lib/prismadb";
 import { BillboardsSchema } from "@/schema";
 import { NextResponse } from "next/server";
@@ -13,7 +12,9 @@ export const POST = async (
   }
 ) => {
   try {
-    const { isAuth, userInfo, userId } = await useAuth();
+    const session = await auth();
+    const userId = session?.user?.id;
+
     const body = await req.json();
 
     const validatoresData = BillboardsSchema.safeParse(body);
@@ -45,7 +46,7 @@ export const POST = async (
 
     if (!storeByUserId) {
       return new NextResponse("Unathourized!", { status: 401 });
-    };
+    }
 
     const billboard = await prismadb.billboard.create({
       data: {
@@ -71,22 +72,21 @@ export const GET = async (
   }
 ) => {
   try {
-
     if (!params?.storeId) {
       return new NextResponse("Store id is required", { status: 400 });
-    };
+    }
 
     const { storeId } = params;
 
     const billboards = await prismadb.billboard.findMany({
       where: {
-        storeId
-      }
+        storeId,
+      },
     });
 
     return NextResponse.json(billboards);
   } catch (error) {
     console.log("[BILLBOARD_GET_ERROR]-->", error);
     return new NextResponse("Internal error", { status: 500 });
-  };
+  }
 };

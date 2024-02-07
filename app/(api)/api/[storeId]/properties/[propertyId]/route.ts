@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 import { PropertiesSchema } from "@/schema";
 import prismadb from "@/lib/prismadb";
-import { useAuth } from "@/hooks/use-auth";
+import { auth } from "@/auth";
 
 export const GET = async (
   req: Request,
@@ -37,7 +37,9 @@ export const PATCH = async (
   { params }: { params: { storeId: string; propertyId: string } }
 ) => {
   try {
-    const { userId } = await useAuth();
+    const session = await auth();
+    const userId = session?.user?.id;
+
     const body = await req.json();
 
     if (!userId) {
@@ -51,12 +53,12 @@ export const PATCH = async (
     }
 
     const {
-      data: { name  },
+      data: { name },
     } = validatorData;
 
     if (!params.propertyId) {
       return new NextResponse("PropertyId is required", { status: 400 });
-    };
+    }
 
     // authorization don not change
     const storeByUserId = await prismadb.store.findFirst({
@@ -68,7 +70,7 @@ export const PATCH = async (
 
     if (!storeByUserId) {
       return new NextResponse("Unathourized!", { status: 401 });
-    };
+    }
 
     const property = await prismadb.property.update({
       where: {
@@ -91,7 +93,8 @@ export const DELETE = async (
   { params }: { params: { storeId: string; propertyId: string } }
 ) => {
   try {
-    const { userId } = await useAuth();
+    const session = await auth();
+    const userId = session?.user?.id;
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });

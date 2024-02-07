@@ -1,7 +1,5 @@
 import prismadb from "@/lib/prismadb";
 import React from "react";
-import { PrismaClient, Prisma } from "@prisma/client";
-import { BillboardForm } from "@/components/forms/billboard-form";
 import { isValidObjectId } from "@/lib/objectIdValidator";
 import { redirect } from "next/navigation";
 import { SizeForm } from "@/components/forms/size-form";
