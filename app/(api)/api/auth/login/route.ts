@@ -17,7 +17,7 @@ export const OPTIONS = async () => {
   return NextResponse.json({}, { headers: corsHeaders });
 };
 
-export const POST = async (req: Request) => {
+export const POST = async (req: Request): Promise<void | Response> => {
   try {
     const body = await req.json();
 
@@ -66,15 +66,13 @@ export const POST = async (req: Request) => {
     if (error instanceof AuthError) {
       switch (error.type) {
         case "CredentialsSignin":
-          return { error: "Invalid credentials!" };
+          return new NextResponse("Invalid credentials!", { status: 400 });
         default:
-          return { error: "Something went wrong!" };
+          return new NextResponse("Something went wrong!", { status: 500 });
       }
     }
 
     console.log("[LOGIN_POST_ERROR]-->", error);
-    throw error;
     return new NextResponse("Internal error", { status: 500 });
-
   }
 };
